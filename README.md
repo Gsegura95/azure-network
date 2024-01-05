@@ -46,9 +46,6 @@ Create a Resource Group:
 <h2>Create the Windows 10 VM:</h2>
 
 
-
-
-
 - In the Azure portal, search for "Virtual Machines".
 - Click "Create" and select "Windows Server" as the image.
 - Choose the appropriate version (e.g., Windows 10 Pro).
@@ -59,6 +56,7 @@ Create a Resource Group:
 - Click "Review + create" and then "Create".
 
 <h2>Create the Ubuntu VM</h2>
+
 
 - Repeat the VM creation process, but select "Ubuntu Server" as the image.
 - Provide a name for the VM.
