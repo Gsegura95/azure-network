@@ -7,7 +7,6 @@
 Explore virtual networks and traffic analysis in a hands-on lab. <br />
 
 
-<h2>Video Demonstration</h2>
 
 
 <h2>Environments and Technologies Used</h2>
@@ -28,21 +27,27 @@ Explore virtual networks and traffic analysis in a hands-on lab. <br />
 - Part 1: Building Our Virtual Playground
 - Part 2: Observing Network Traffic in Action
 
-<h2>Actions and Observations</h2>
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
+
  <h2>Building Our Virtual Playground </h2>
 
-Create a Resource Group:
+Create a Resource Group: 
+![Screenshot 2024-01-05 153346](https://github.com/Gsegura95/azure-network/assets/87348052/62fd8e5a-796b-4cbd-bcdd-54a77eb59a1c)
+- In the Azure portal, navigate to Resource Groups.
 
-In the Azure portal, navigate to Resource Groups.
+
+
+![Screenshot 2024-01-05 153431](https://github.com/Gsegura95/azure-network/assets/87348052/2c6bf80f-b35e-4530-9e30-a86bfd3a7ae2)
+![Screenshot 2024-01-05 153521](https://github.com/Gsegura95/azure-network/assets/87348052/78b5c193-c6a3-423e-982b-178e0427e105)
+
 - Click "Create" and provide a name for your resource group.
 - Select the appropriate region and click "Create".
 
 <h2>Create the Windows 10 VM:</h2>
+
+
+
+
 
 - In the Azure portal, search for "Virtual Machines".
 - Click "Create" and select "Windows Server" as the image.
