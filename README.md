@@ -1,142 +1,218 @@
-# azure-network
 <p align="center">
-<img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/>
+<img # azure-network
+<p align="center">
+<img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/
+</p>
+ >
 </p>
 
-<h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
-Explore virtual networks and traffic analysis in a hands-on lab. <br />
+<h1 align = "center">Virtual Machine Network in Microsoft Azure</h1>
+This tutorial outlines how to set up an Virtual Machine Network in Microsoft Azure and doing some exercises observing traffic.
 
-
-
+<br />
 
 <h2>Environments and Technologies Used</h2>
 
-- Microsoft Azure (Virtual Machines/Compute)
-- Remote Desktop
-- Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
-- Wireshark (Protocol Analyzer)
+<ul>
+  <li>Microsoft Azure (Virtual Machines/Compute)</li>
+  <li>Microsoft Remote Desktop</li>
+  <li>Windows Command Prompt</li>
+  <li>Wireshark</li>
+  <li>Network Protocols</li>
+  <ul>
+    <li>DNS - Domain Name System</li>
+    <li>ICMP - Internet Control Message Protocol</li>
+    <li>SSH - Secure Shell</li>
+    <li>RDP - Remote Desktop Protocol</li>
+  </ul>
+</ul>
+
+</br>
 
 <h2>Operating Systems Used </h2>
+<ul>
+  <li>Windows 10 (21H2)</li>
+  <li>Linux (Ubuntu 20.04)</li>
+</ul>
 
-- Windows 10 (21H2)
-- Ubuntu Server 20.04
+</br>
 
-<h2>High-Level Steps</h2>
+<h2>List of Prerequisites</h2>
+<ol>
+  <li>Microsoft Azure Account and Subscription</li>
+  <li>Access to Microsoft Remote Desktop Connection</li>
+  <ul>
 
-- Part 1: Building Our Virtual Playground
-- Part 2: Observing Network Traffic in Action
+</ol>
 
+<h2>Installation Steps</h2>
 
-
- <h2>Building Our Virtual Playground </h2>
-
-Create a Resource Group: 
-![Screenshot 2024-01-05 153346](https://github.com/Gsegura95/azure-network/assets/87348052/62fd8e5a-796b-4cbd-bcdd-54a77eb59a1c)
-- In the Azure portal, navigate to Resource Groups.
-
-
-
-![Screenshot 2024-01-05 153431](https://github.com/Gsegura95/azure-network/assets/87348052/2c6bf80f-b35e-4530-9e30-a86bfd3a7ae2)
-![Screenshot 2024-01-05 153521](https://github.com/Gsegura95/azure-network/assets/87348052/78b5c193-c6a3-423e-982b-178e0427e105)
-
-- Click "Create" and provide a name for your resource group.
-- Select the appropriate region and click "Create".
-
-<h2>Create the Windows 10 VM:</h2>
-
-
-- In the Azure portal, search for "Virtual Machines".
-- Click "Create" and select "Windows Server" as the image.
-- Choose the appropriate version (e.g., Windows 10 Pro).
-- Select the resource group you created earlier.
-- Provide a name for the VM.
-- Choose a size (e.g., Standard B2s).
-- Under "Networking", create a new virtual network and subnet or select an existing one.
-- Click "Review + create" and then "Create".
-
-<h2>Create the Ubuntu VM</h2>
-
-
-- Repeat the VM creation process, but select "Ubuntu Server" as the image.
-- Provide a name for the VM.
-- Choose the same virtual network and subnet as the Windows VM.
-</p>
-<br />
+<h3>Creating our Resource Group and Virtual Machines</h3>
 
 <p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  <ul>
+    <li><b>Resource Group</b></li>
+      <ul>
+       <li>Through <b>Azure Services</b>, go to <b>Resource groups</b> to create a Resource Group and name your Resource Group <b>RG-VM</b>. Take note of the <b>Region</b> of your Resouce Group as it'll come in play when setting up our VMs. Once done, then click on <b>Review + Create</b></li>
+        <ul>
+          <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/89c6d771-64e6-495f-959c-640e482cc8a2" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+        </ul>
+      </ul>
+    <li><b>Virtual Machine 1 using Windows 10</b></li>
+    <ul>
+      <li>Through <b>Azure Services</b>, go to <b>Virtual Machines</b> to create an Azure Virtual Machine. Select the Resource group we've created (RG-VM) and name the virtual machine <b>VM-1</b>. Make sure the <b>Region</b> is the same as your Resource Group and we'll set our <b>Availability Options</b> set to <i>No infrastructure</i> and <b>Security Type</b> to <i>Standard</i> for this tutorial</li>
+      <li>Set the <b>Image</b> (our Operating System) to <i>Windows 10 Pro, Version 22H2, x64 Gen2</i></li>
+      <li>The <b>Size</b> selected dicates the general processing power and RAM of our VM, for this tutorial we'll set it to <i>Standard_E2s_V3</i> which provides 2 virtual CPUs and 16 GBs of RAM</li>
+      <ul>
+        <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/be86a82d-db6c-4d45-9961-9acc61c2aadb" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+      </ul>
+      <li>Set the username and password of your VM for logging in and make sure to check the box for licensing agreement</li>
+      <ul>
+        <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/f4aedc00-a714-438b-bd34-5ca68694795e" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+      </ul>
+      <li>Go to the <b>Network</b> tab and notice the <b>Virtual Network</b> created by the Virtual Machine as it should've been made by the Resource Group. It will be made automatically by the Virtual Machine</li>
+      <ul>
+        <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/3d2688ab-110e-41cd-b60d-7c5772ccd480" height="80%" width="80%"></li>
+      </ul>
+      <li>Then head to the <b>Review + Create</b> and click on <b>Create</b> to deploy your Virtual Machine. Give it some time to fully deploy before moving on.</li>
+    </ul>
+    <li><b>Virtual Machine 2 using Ubuntu</b></li>
+    <ul>
+      <li>Same process as Virtual Machine 1 but we'll name the VM <b>VM-2</b> and set the Image to <i>Ubuntu Server 20.04 LTS x64 Gen2</i></li>
+      <li>Ubuntu by default has their Administrator Account authentication as SSH public key, so we must set it as Password for logging in through Remote Desktop</li>
+      <ul>
+        <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/70b6006b-a0f2-4b59-9eff-cf73e7174c70" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+      </ul>
+    </ul>
+  </ul>
 </p>
-<p>
-<h2>Observing Network Traffic in Action</h2>
 
-Connect to the Windows VM:
-
-- Once the VMs are deployed, use Remote Desktop to connect to the Windows VM.
-- Install Wireshark on the Windows VM (if not already installed).
-- Capture and Analyze Traffic:
-
-Refer to Wireshark's Documentation for detailed instructions on capturing and analyzing different types of traffic.
-
-Focus on:
-- ICMP (ping): Send pings between VMs and observe the packets.
-- SSH: Connect to the Ubuntu VM using SSH and capture the encrypted traffic.
-- DHCP: Renew IP addresses of VMs and observe the DHCP process.
-- DNS: Use nslookup to query domain names and capture DNS queries and responses.
-- RDP: Initiate a remote desktop connection and observe the RDP traffic.
-  
-<h2>Experiment with Security Groups:</h2>
-
-In the Azure portal, navigate to Network Security Groups.
-Edit the rules for the network security group associated with the Ubuntu VM.
-Try blocking ICMP traffic and observe the effect on ping requests.
-
-Here are the Azure-specific steps.
-
-1. Initiate a perpetual/non-stop ping:
-
-In the Windows 10 VM's command prompt or PowerShell, type:
-ping -t <private IP address of Ubuntu VM>
-This will send continuous ping requests to the Ubuntu VM.
-
-2. Disable incoming ICMP traffic in the Network Security Group:
-
-In the Azure portal, navigate to Network Security Groups.
-Find the NSG associated with the Ubuntu VM.
-Edit the inbound security rules.
-Add a new rule with the following settings:
-Priority: A lower number than existing rules (e.g., 100)
-Source: Any
-Source port ranges: *
-Destination: Any
-Destination port ranges: *
-Protocol: ICMP
-Action: Deny
-Save the rule.
-
-3. Observe ICMP traffic in Wireshark and ping activity:
-
-In Wireshark on the Windows 10 VM, observe the ICMP packets.
-You should see ping requests being sent, but no replies being received.
-In the command prompt or PowerShell, the ping should also show timeouts.
-
-4. Re-enable ICMP traffic:
-
-In the Azure portal, edit the inbound security rule for ICMP in the NSG.
-Change the action from "Deny" to "Allow".
-Save the rule.
-
-5. Observe ICMP traffic again:
-
-In Wireshark, you should now see ping replies being received.
-The ping in the command prompt or PowerShell should also start showing successful replies.
-
-6. Stop the ping activity:
-
-In the command prompt or PowerShell, press Ctrl+C to stop the ping.
-
-</p>
 <br />
+
+<h3>Logging into a Virtual Machine using Remote Desktop Connection</h3>
+
+<p>
+  <ul>
+   <li>Through <b>Azure Services</b>, go to <b>Virtual Machines</b> and select VM-1 we've created and click on <b>Connect</b> to connect to the VM, from this page you can obtain the <b>Public IP Address</b> which we will use to connect to it via Remote Desktop Connection</li>
+    <ul>
+      <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/f38f8254-73c7-42a4-8b31-2bd3d328cff1" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>Copy the address and paste it into Remote Desktop Connection and click on <b>Connect</b> and log in using the username and password you set up for VM-1 (a pop up may show up for verification, just click on "Yes" if it does)</li>
+    <ul>
+      <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/8ebbf47a-ec01-414e-8757-3eb272491e35" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>You are now successfully logged into your VM!</li>
+    <ul>
+      <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/a42e65d9-f9e3-4059-a04e-de51bb335d85" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+  </ul>
+</p>
+
+<br />
+
+<h2>Observing Traffic in Virtual Machines</h2>
+
+<h3>Download and Install Wireshark</h3>
+
+<p>
+  <ul>
+    <li>First, download <a href="https://www.wireshark.org/download.html">Wireshark</a> in your VM. Downloads may be slow depending on your VM's CPU</li>
+  </ul>
+</p>
+
+<br />
+
+<h3>Observing ICMP (Internet Control Message Protocol) Traffic</h3>
+
+<p>
+  <ul>
+    <li>Once installed, open Wireshark and start capturing packets (the blue fin icon). In the filter bar, type <b>icmp</b> to filter incoming ICMP packets</li>
+    <ul>
+      <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/08260fcb-734a-48fd-b202-c863b9306ab6" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>Back to your physical desktop, head to your Microsoft Azure Account obtain the <b>Private IP Address</b> of VM-2 and copy it</li>
+    <ul>
+    <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/14f48437-5d89-417a-b4b5-218fd845fa54" height="50%" width="50%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>Open up <b>Windows Powershell</b> in VM-1 and in the command line enter <b>ping</b> and the private IP of VM-2. Once done, ICMP packets should now display in Wireshark</li>
+    <ul>
+    <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/a5bd2c40-4a1f-490d-90a0-3155ff281c89" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>We will now start a perpetual / non-stop ping between the Virtual Machines by entering <b>ping</b> then the private IP of VM-2 followed by <b>-t</b> causing nonstop ICMP packets displaying in Wireshark</li>
+    <ul>
+    <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/474bfaac-5695-43dc-9f55-63d2ded0ccba" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>Heading back to the Microsoft Azure Account, we'll go to the VM-2's <b>Network Security Group (NSG)</b> (which should be named <i>VM-2-nsg</i>) in order to halt the traffic</li>
+    <li>In VM-2-nsg, we'll go to <b>inbound security rules</b> and create a security rule that denies ICMPs. Click on <b>Add</b> to open a right side pop up to set the rule and dot in <b>Deny</b> under action and <b>ICMP</b> under Protocol. Set the Priority higher than 300 (priorities are inversely proportional meaning lower numbers have higher priority) and name the rule <b>DENY_ICMP_PING</b> then click <b>Add</b> to finish</li>
+    <ul>
+    <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/1d628322-94f9-479f-ad6d-cb2d2e3b6dba" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>Once completed, you'll notice the message "Request timed out" will start displaying in Powershell in VM-1, meaning ICMP ping has been halted from our security rule</li>
+    <ul>
+    <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/e7f22595-3c67-40e5-83a2-6344027b80a5" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+    </ul>
+    <li>To reinstate the traffic, simply head back to your Microsoft Azure Account and set the DENY_ICMP_PING inbound rule's action to <b>Allow</b> and save</li>
+  </ul>
+</p>
+
+<br />
+
+<h3>Observing SSH (Secure Shell) Traffic</h3>
+
+<p>
+<ul>
+  <li>In Windows Powershell inside VM-1, type in <b>ssh VM-2@[VM-2's Private IP]</b> then hit Enter, enter in "yes" and it will ask for the password for VM-2</li>
+  <li>Since we are accessing the Terminal of VM-2 (essentially Linux's version of a command prompt) it doesn't diplay input/dots when typing a password but do know it is registering input when typing</li>
+  <li>Once logged in, you will be connected to the Terminal of VM-2. You can exit by entering the command <b>exit</b></li>
+  <ul>
+  <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/c8c7f09d-79e0-4426-a47c-c937947b3eba" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+  </ul>
+  <li>Typing in commands such as <i>username, pwd, or sudo apt</i> will display traffic on Wireshark, you can filter ssh traffic in Wireshark by typing in <b>ssh</b> in the filter bar</li>
+</ul>
+</p>
+
+<br />
+
+<h3>Observer DHCP (Dynamic Host Configuration Protocol) Traffic</h3>
+
+<p>
+  <ul>Filter DHCP Traffic in Wireshark by entering <b>dhcp</b> in the filter bar</ul>
+  <ul>DHCP assigns IP Addresses to devices new to the network the moment said device joins the network. We can reassign an IP Address in the VM by going to Powershell an enterning the command <b>ipconfig /renew</b></ul>
+</p>
+
+<br/>
+
+<h3>Observing DNS (Domain Name System) Traffic</h3>
+
+<p>
+  <ul>
+    <li>Filter DNS traffic in Wireshark by entering <b>dns</b> in the filter bar</li>
+    <li>In Powershell, type in <b>nslookup</b> and a website such as google.com</li>
+  </ul>
+</p>
+
+<br/>
+
+<h3>Observing RDP (Remote Desktop Protocol) Traffic</h3>
+
+<p>
+  <ul>
+    <li>Filter RDP traffic in Wireshark by entering <b>tcp.port == 3389</b> in the filter bar and you'll notice non-stop traffic</li>
+    <li>This is because the RDP is constantly showing you a live stream from one computer to another, therefor traffic is always being transmitted</li>
+  </ul>
+</p>
+
+<br/>
+
+<h2>Clean Up</h2>
+<ul>
+  <li>Log off Remote Desktop Connection</li>
+  <li>It is advise to delete your Resource Group and VMs after finishing tinkering with them to prevent future costs, deletion of assets on Azure require verification by entering the name of the asset. Also to note, the Resource Group <b>NetworkWatcherRG</b> is created when creating NSGs for Virutal Machines and requires its own deletion</li>
+  <ul>
+  <li><img src="https://github.com/ColtonTrauCC/vm-network/assets/147654000/0f329b9c-4f52-4d9e-96ff-7aa33445cab6" height="80%" width="80%" alt="Disk Sanitization Steps"/></li>
+  </ul>
+</ul>
+
 
 
 
